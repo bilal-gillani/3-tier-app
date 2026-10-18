@@ -1,9 +1,18 @@
 -- ================================================
--- E-Commerce Store - Database Schema
+-- E-Commerce Store - Database Schema & User Setup
 -- ================================================
 
 CREATE DATABASE IF NOT EXISTS ecommerce_store;
 USE ecommerce_store;
+
+-- ------------------------------------------------
+-- Dedicated Application User Setup
+-- Works for both Single-VM (localhost) and Multi-VM (remote backend)
+-- Replace 'YourStrongPasswordHere!' with your chosen database password
+-- ------------------------------------------------
+CREATE USER IF NOT EXISTS 'ecommerce_user'@'%' IDENTIFIED BY 'YourStrongPasswordHere!';
+GRANT ALL PRIVILEGES ON ecommerce_store.* TO 'ecommerce_user'@'%';
+FLUSH PRIVILEGES;
 
 -- ------------------------------------------------
 -- Users Table
@@ -31,7 +40,7 @@ CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT DEFAULT NULL,
-    icon VARCHAR(10) DEFAULT '📦',
+    icon VARCHAR(10) DEFAULT '🛍️',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
