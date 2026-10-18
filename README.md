@@ -1,4 +1,4 @@
-# LuxeStore — Three-Tier Web Application
+﻿# LuxeStore — Three-Tier Web Application
 
 <p align="center">
   <img src="https://img.shields.io/badge/Architecture-Three--Tier-6C63FF?style=for-the-badge" alt="Three-Tier Architecture" />
@@ -15,31 +15,30 @@
 ## Architecture Overview
 
 ```text
-+-----------------------------------------------------------------------------+
-|                       TIER 1: PRESENTATION (FRONTEND)                       |
-|   • Nginx Web Server (Port 80)                                              |
-|   • Static SPA-style Frontend (HTML5, CSS3 Light/Dark Themes, Vanilla JS)   |
-|   • Storefront & Admin Portal (/admin/)                                     |
-|   • Reverse Proxy: Forwards /api/* requests to Application Tier             |
-+--------------------------------------+--------------------------------------+
-                                       | HTTP REST (:80/api/ -> :3000)
-+--------------------------------------v--------------------------------------+
-|                    TIER 2: APPLICATION / LOGIC (BACKEND)                    |
-|   • Node.js 22.x & Express.js REST API (Port 3000)                          |
-|   • Managed by PM2 Process Manager (Auto-restart, zero downtime)            |
-|   • Stateless JWT Authentication & Role-Based Access (Customer / Admin)     |
-|   • Inventory Validation & ACID Transactional Order Processing              |
-|   • Security: Helmet headers, CORS policies, Express Rate Limiter           |
-+--------------------------------------+--------------------------------------+
-                                       | MySQL Protocol (Port 3306)
-+--------------------------------------v--------------------------------------+
-|                           TIER 3: DATA (DATABASE)                           |
-|   • MySQL 8.0+ / MariaDB (Port 3306, utf8mb4)                               |
-|   • Relational Schema: users, categories, products, cart_items, orders      |
-|   • Foreign Key Constraints, Cascading Rules, Full-Text Search Indexes      |
-|   • Dedicated Application User: ecommerce_user                              |
-+-----------------------------------------------------------------------------+
+                  Internet / Client Browser
+                             |
+                             v (Port 80 / 443)
+       +-------------------------------------------+
+       |     TIER 1: PRESENTATION (FRONTEND)       |
+       |     Nginx Web Server + Static Assets      |
+       +---------------------+---------------------+
+                             |
+                             v Reverse Proxy (Port 3000)
+       +-------------------------------------------+
+       |     TIER 2: APPLICATION (BACKEND)         |
+       |     Node.js 22 + Express REST API (PM2)   |
+       +---------------------+---------------------+
+                             |
+                             v MySQL Protocol (Port 3306)
+       +-------------------------------------------+
+       |     TIER 3: DATA (DATABASE)               |
+       |     MySQL 8.0+ / MariaDB Database         |
+       +-------------------------------------------+
 ```
+
+- **Tier 1 (Presentation)**: Nginx delivers the responsive customer storefront and admin portal while reverse-proxying API traffic.
+- **Tier 2 (Application)**: Node.js & Express REST API manages business logic, JWT authentication, and transactional order operations.
+- **Tier 3 (Data)**: MySQL stores relational catalog, customer, cart, and order data with ACID compliance.
 
 ### Deployment Modes
 
@@ -233,5 +232,18 @@ sudo systemctl reload nginx
    - Add items to the cart and complete checkout.
    - View your placed order in **"My Orders"**.
 3. **Admin Portal**:
-   - Navigate to `http://<FRONTEND_VM_PUBLIC_IP>/admin/dashboard.html`
-   - Log in with your admin credentials to view KPI metrics, catalog management, and order status updates.
+   - Navigate to:
+     ```text
+     http://<FRONTEND_VM_PUBLIC_IP>/admin/dashboard.html
+     ```
+   - Log in using the default pre-seeded administrator credentials:
+
+     | Credential | Value |
+     |---|---|
+     | **Email** | `admin@email.com` |
+     | **Password** | `123Hello!` |
+     | **Role** | `admin` (Full administrative privileges) |
+
+   > [!NOTE]
+   > These credentials are automatically initialized by `db/seed.sql` using a pre-generated bcrypt hash.
+   > For production deployments, change this password or regenerate a custom hash before running the seed script.
