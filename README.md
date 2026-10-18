@@ -94,7 +94,7 @@ sudo systemctl enable mysql
 sudo mysql_secure_installation
 
 # 3. Configure Database & Application User
-# (Optional) Edit db/init.sql to set your own password for 'ecommerce_user'
+# Edit db/init.sql to set your own password for 'ecommerce_user'
 sudo mysql -u root < db/init.sql
 
 # 4. Seed Categories, Products, and Demo Admin
