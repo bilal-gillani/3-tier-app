@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout — LuxeStore</title>
+    <meta name="description" content="Complete your purchase at LuxeStore.">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        (function() {
+            const t = localStorage.getItem('luxestore-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+</head>
+<body>
+
+<nav class="navbar" id="navbar"></nav>
+
+<div class="container">
+    <div class="page-header">
+        <div class="breadcrumb">
+            <a href="/index.html">Home</a>
+            <span class="breadcrumb-sep">›</span>
+            <a href="/cart.html">Cart</a>
+            <span class="breadcrumb-sep">›</span>
+            <span>Checkout</span>
+        </div>
+        <h1>Checkout</h1>
+    </div>
+
+    <!-- Success State (hidden by default) -->
+    <div id="order-success" class="hidden" style="padding:60px 0;text-align:center;">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--success-bg);border:1px solid var(--success-border);color:var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="margin-bottom:12px;">Order Placed Successfully</h2>
+        <p class="text-secondary" style="margin-bottom:8px;">
+            Your order <strong style="color:var(--accent);" id="success-order-id"></strong> has been confirmed.
+        </p>
+        <p class="text-secondary" style="margin-bottom:32px;">
+            Total charged: <strong style="color:var(--text-primary);" id="success-total"></strong>
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+            <a href="/orders.html" class="btn btn-primary btn-lg">View Order History</a>
+            <a href="/index.html" class="btn btn-secondary btn-lg">← Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- Checkout Form -->
+    <div id="checkout-form-wrap">
+        <div class="checkout-layout">
+            <!-- Shipping Form -->
+            <div>
+                <div class="card" style="margin-bottom:24px;">
+                    <h3 style="margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+                        <span style="width:24px;height:24px;background:var(--btn-primary-bg);color:var(--btn-primary-text);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;">1</span>
+                        Shipping Information
+                    </h3>
+                    <form id="checkout-form" style="display:flex;flex-direction:column;gap:16px;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="ship-name">Full Name <span>*</span></label>
+                                <input class="form-control" type="text" id="ship-name" placeholder="John Smith" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ship-phone">Phone Number <span>*</span></label>
+                                <input class="form-control" type="tel" id="ship-phone" placeholder="+1 555 000 0000" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="ship-address">Street Address <span>*</span></label>
+                            <input class="form-control" type="text" id="ship-address" placeholder="123 Main Street, Apt 4B" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="ship-city">City / State / ZIP <span>*</span></label>
+                            <input class="form-control" type="text" id="ship-city" placeholder="New York, NY 10001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="ship-notes">Order Notes <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                            <textarea class="form-control" id="ship-notes" rows="3"
+                                placeholder="Special delivery instructions, gate code, etc."></textarea>
+                        </div>
+
+                        <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:4px;">
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);">
+                                <span style="color:var(--accent);display:flex;align-items:center;">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                </span>
+                                <div>
+                                    <div style="font-weight:600;font-size:.875rem;">Payment on Delivery</div>
+                                    <div class="text-xs text-muted">Contactless card or cash accepted upon delivery</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-full btn-lg" type="submit" id="place-order-btn">
+                                Complete Order →
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Review -->
+            <div>
+                <div class="order-summary">
+                    <h3 style="margin-bottom:4px;display:flex;align-items:center;gap:10px;">
+                        <span style="width:24px;height:24px;background:var(--btn-primary-bg);color:var(--btn-primary-text);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;">2</span>
+                        Order Review
+                    </h3>
+                    <p class="text-xs text-muted" style="margin-bottom:20px;padding-left:34px;">Review your items before confirming</p>
+                    <div id="order-review">
+                        <div class="loading-overlay"><div class="spinner"></div></div>
+                    </div>
+                    <div style="margin-top:16px;font-size:.75rem;color:var(--text-muted);text-align:center;" id="total-display"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer" id="footer"></footer>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/components.js"></script>
+<script src="/js/checkout.js"></script>
+</body>
+</html>

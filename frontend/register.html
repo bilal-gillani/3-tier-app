@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — LuxeStore</title>
+    <meta name="description" content="Create your LuxeStore account and start shopping premium products.">
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        (function() {
+            const saved = localStorage.getItem('luxestore-theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+        })();
+    </script>
+</head>
+<body>
+<div class="auth-bg"></div>
+<div class="auth-page">
+    <div class="auth-card" style="max-width:480px;">
+        <div class="auth-logo">
+            <a href="/index.html" class="auth-logo-icon" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;" title="Return to LuxeStore">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+            </a>
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join LuxeStore and discover premium products</p>
+        </div>
+
+        <form id="register-form" style="display:flex;flex-direction:column;gap:16px;">
+            <div class="form-group">
+                <label class="form-label" for="reg-name">Full Name <span>*</span></label>
+                <input class="form-control" type="text" id="reg-name"
+                    placeholder="John Smith" required autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="reg-email">Email Address <span>*</span></label>
+                <input class="form-control" type="email" id="reg-email"
+                    placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Password <span>*</span></label>
+                    <input class="form-control" type="password" id="reg-password"
+                        placeholder="Min. 6 characters" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-confirm">Confirm Password <span>*</span></label>
+                    <input class="form-control" type="password" id="reg-confirm"
+                        placeholder="Repeat password" required autocomplete="new-password">
+                </div>
+            </div>
+
+            <div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;">
+                By creating an account you agree to our
+                <a href="#" style="color:var(--accent);">Terms of Service</a> and
+                <a href="#" style="color:var(--accent);">Privacy Policy</a>.
+            </div>
+
+            <button class="btn btn-primary btn-full btn-lg" type="submit" id="register-btn">
+                Create Account →
+            </button>
+        </form>
+
+        <p style="text-align:center;margin-top:20px;font-size:.875rem;color:var(--text-muted);">
+            Already have an account?
+            <a href="/login.html" style="color:var(--accent);font-weight:600;">Sign in →</a>
+        </p>
+    </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/components.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>
